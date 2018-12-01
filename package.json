@@ -1,7 +1,7 @@
 {
   "name": "react-logic-steps",
   "version": "1.0.0",
-  "description": "",
+  "description": "react逻辑组件, 辅助实现类似于steps的功能(未提供ui)",
   "author": "g770728y",
   "license": "MIT",
   "repository": "g770728y/react-logic-steps",

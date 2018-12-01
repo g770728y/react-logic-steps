@@ -9,6 +9,8 @@ type IProps = {
   initial?: string;
   children: (
     current: string,
+    isFirst: boolean,
+    isLast: boolean,
     onBack: VoidFunction,
     onForward: VoidFunction
   ) => ReactNode;
@@ -47,8 +49,15 @@ class Steps extends React.Component<IProps, IState> {
 
   render() {
     const { currentIndex } = this.state;
-    const current = this.props.steps[currentIndex];
-    return this.props.children(current, this.onBack, this.onForward);
+    const { steps } = this.props;
+    const current = steps[currentIndex];
+    return this.props.children(
+      current,
+      currentIndex === 0,
+      currentIndex === steps.length - 1,
+      this.onBack,
+      this.onForward
+    );
   }
 }
 
