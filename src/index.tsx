@@ -1,23 +1,55 @@
-/**
- * @class ExampleComponent
- */
+import React, { ReactNode } from 'react';
 
-import * as React from 'react'
+interface IState {
+  currentIndex: number;
+}
 
-import styles from './styles.css'
+type IProps = {
+  steps: string[];
+  initial?: string;
+  children: (
+    current: string,
+    onBack: VoidFunction,
+    onForward: VoidFunction
+  ) => ReactNode;
+};
 
-export type Props = { text: string }
+export interface StepProps {
+  onBack: VoidFunction;
+  onForward: VoidFunction;
+}
 
-export default class ExampleComponent extends React.Component<Props> {
+class Steps extends React.Component<IProps, IState> {
+  constructor(props: IProps) {
+    super(props);
+    const { steps, initial } = props;
+    const currentIndex = initial ? steps.indexOf(initial) : 0;
+    if (currentIndex < 0) throw Error('Step组件: initial必须包含在steps里');
+    this.state = {
+      currentIndex
+    };
+  }
+
+  onBack = () => {
+    console.log('state:', this.state);
+    const currentIndex = this.state.currentIndex;
+    if (currentIndex > 0) {
+      this.setState({ currentIndex: currentIndex - 1 });
+    }
+  };
+
+  onForward = () => {
+    const currentIndex = this.state.currentIndex;
+    if (currentIndex < this.props.steps.length - 1) {
+      this.setState({ currentIndex: currentIndex + 1 });
+    }
+  };
+
   render() {
-    const {
-      text
-    } = this.props
-
-    return (
-      <div className={styles.test}>
-        Example Component: {text}
-      </div>
-    )
+    const { currentIndex } = this.state;
+    const current = this.props.steps[currentIndex];
+    return this.props.children(current, this.onBack, this.onForward);
   }
 }
+
+export default Steps;
